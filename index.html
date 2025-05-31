@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Identification - Vincehz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f0f8f0;
+            color: #333;
+        }
+
+        /* Navigation Styles */
+        .header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 7%;
+            background: rgba(245, 222, 179, 0.85);
+            box-shadow: 0 2px 10px rgba(139, 69, 19, 0.2);
+            z-index: 1000;
+        }
+
+        .logo h1 {
+            color: #8B4513;
+            font-size: 1.8em;
+            margin: 0;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .navbar a {
+            color: #8B4513;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #654321;
+        }
+
+        .navbar .btn {
+            padding: 8px 20px;
+            background: #8B4513;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .navbar .btn:hover {
+            background: #654321;
+            transform: translateY(-2px);
+        }
+
+        #menu-btn {
+            display: none;
+            cursor: pointer;
+            font-size: 2rem;
+            color: #8B4513;
+        }
+
+        header {
+            background: rgba(245, 222, 179, 0.85);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(139, 69, 19, 0.2);
+        }
+
+        header h1 {
+            color: #8B4513;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .info-section {
+            background: rgba(255, 248, 220, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(139, 69, 19, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .info-section h2 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .info-section p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .upload-section {
+            background: rgba(245, 222, 179, 0.85);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(139, 69, 19, 0.2);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .upload-section h2 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .upload-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .file-input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #8B4513;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .submit-btn {
+            background: #2ecc71;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #8B4513;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .result-section {
+            display: none;
+            background: rgba(255, 248, 220, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .result-section img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .disease-info {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .disease-info h3 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #8B4513;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #654321;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            #menu-btn {
+                display: block;
+            }
+
+            .navbar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(245, 222, 179, 0.95);
+                border-top: 1px solid rgba(139, 69, 19, 0.2);
+                padding: 1rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .upload-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="header">
+        <div class="logo">
+            <h1>Vincehz</h1>
+        </div>
+
+        <nav class="navbar">
+            <a href="../index.html">Home</a>
+            <a href="../index.html#features">Features</a>
+            <a href="../index.html#about">About</a>
+            <a href="../index.html#footer">Contact</a>
+            <a href="../explore/index.html" class="btn">EXPLORE NOW</a>
+            <a href="#" class="btn" onclick="logout()">Logout</a>
+        </nav>
+
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </header>
+
+    <!-- Main Content Header -->
+    <header style="margin-top: 2rem;">
+        <h1>Plant Disease Identification</h1>
+        <p>Upload your plant images for instant disease detection</p>
+    </header>
+
+    <div class="container">
+        <div class="info-section">
+            <h2>How It Works</h2>
+            <p>Our advanced AI system can identify various plant diseases by analyzing images of plant leaves. Simply upload a clear image of the affected plant leaf, and our system will analyze it to identify any potential diseases.</p>
+            <p>The system can detect diseases in various crops including:</p>
+            <ul style="margin-left: 20px; line-height: 1.6;">
+                <li>Apple (Scab, Black Rot, Cedar Rust)</li>
+                <li>Cherry (Powdery Mildew)</li>
+                <li>Corn (Gray Leaf Spot, Common Rust, Northern Leaf Blight)</li>
+                <li>Grape (Black Rot, Esca, Leaf Blight)</li>
+                <li>Potato (Early Blight, Late Blight)</li>
+                <li>Tomato (Various diseases)</li>
+                <li>And many more...</li>
+            </ul>
+        </div>
+
+        <div class="upload-section">
+            <h2>Upload Plant Image</h2>
+            <div class="streamlit-redirect" style="text-align: center;">
+                <p style="margin-bottom: 20px;">Our disease detection system is powered by an advanced AI model.</p>
+                <div style="margin-bottom: 20px;">
+                    <a href="http://localhost:8501" class="submit-btn" style="text-decoration: none; display: inline-block; margin: 0 10px;">
+                        Open Locally (localhost)
+                    </a>
+                    <a href="http://192.168.1.1:8501" class="submit-btn" style="text-decoration: none; display: inline-block; margin: 0 10px;">
+                        Open on Network
+                    </a>
+                </div>
+                <div style="margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 8px; text-align: left;">
+                    <p style="margin-bottom: 10px; font-weight: bold;">To start the disease detection server:</p>
+                    <ol style="margin-left: 20px; line-height: 1.6;">
+                        <li>Open a terminal/command prompt</li>
+                        <li>Navigate to the PLANT-DISEASE-IDENTIFICATION folder:
+                            <br><code style="background: #e5e5e5; padding: 2px 5px; border-radius: 3px;">cd PLANT-DISEASE-IDENTIFICATION</code>
+                        </li>
+                        <li>Install required packages (first time only):
+                            <br><code style="background: #e5e5e5; padding: 2px 5px; border-radius: 3px;">pip install -r requirements.txt</code>
+                        </li>
+                        <li>Start the Streamlit server:
+                            <br><code style="background: #e5e5e5; padding: 2px 5px; border-radius: 3px;">streamlit run main.py</code>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <h2>Analysis Result</h2>
+            <div id="resultImage"></div>
+            <div class="disease-info">
+                <h3>Disease Detected: <span id="diseaseName"></span></h3>
+                <p id="diseaseDescription"></p>
+                <p id="treatmentSuggestions"></p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="../index.html" class="back-btn">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Menu toggle functionality
+        let navbar = document.querySelector('.navbar');
+        let menuBtn = document.querySelector('#menu-btn');
+
+        menuBtn.onclick = () => {
+            navbar.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        window.onscroll = () => {
+            navbar.classList.remove('active');
+        }
+
+        // Logout function
+        function logout() {
+            window.location.href = "../login/logout.php";
+        }
+    </script>
+</body>
+</html> 
